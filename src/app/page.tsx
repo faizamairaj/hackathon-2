@@ -1,8 +1,8 @@
-import Hero from "@/components/Hero";
+import Hero from "@/components/Home/Hero";
 import Products from "@/components/Products";
-import Slides from "@/components/Slides";
-import SubHero from "@/components/Subhero";
-import ImageGallery from "@/components/ImageGallery";
+import Slides from "@/components/Home/Slides";
+import SubHero from "@/components/Home/Subhero";
+import ImageGallery from "@/components/Home/ImageGallery";
 
 export default function Home(){
   return (
