@@ -24,7 +24,7 @@ export default function CheckoutSuccess() {
             Order Successful!
           </h1>
           <p className="text-gray-600 mb-6">
-            Thank you for your purchase. We'll send you a confirmation email shortly.
+            Thank you for your purchase. We&apos;ll send you a confirmation email shortly.
           </p>
           <div className="space-y-4">
             <Link

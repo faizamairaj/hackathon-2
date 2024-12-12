@@ -6,7 +6,7 @@ export default function ContactInfo() {
       <div>
         <h2 className="text-3xl font-bold mb-6 text-[#B88E2F]">Get in Touch</h2>
         <p className="text-gray-600">
-          Have a question or feedback? We'd love to hear from you. Send us a message and we'll respond as soon as possible.
+          Have a question or feedback? We&apos;d love to hear from you. Send us a message and we&apos;ll respond as soon as possible.
         </p>
       </div>
 

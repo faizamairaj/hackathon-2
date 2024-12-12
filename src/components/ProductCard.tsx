@@ -6,6 +6,7 @@ import { useWishlist } from "@/context/WishlistContext";
 import { useCompare } from "@/context/CompareContext";
 import QuickView from "./QuickView";
 import { formatPrice } from "@/utils/formatPrice";
+import Image from 'next/image';
 
 interface ProductCardProps {
   id: string;
@@ -98,14 +99,15 @@ export default function ProductCard({
           className={`relative overflow-hidden ${viewMode === 'grid' ? 'w-full' : 'w-1/3'}`}
           onClick={handleCardClick}
         >
-          <img 
-            src={image} 
-            alt={name} 
-            className={`
-              w-full h-64 object-cover transition-transform duration-700
-              ${isHovered ? 'scale-110' : 'scale-100'}
-            `}
-          />
+          <div className="relative w-full h-64">
+            <Image
+              src={image}
+              alt={name}
+              fill
+              className="object-cover rounded-t-2xl"
+              priority
+            />
+          </div>
           
           {/* Sale Badge */}
           <div className="absolute top-4 left-4">
