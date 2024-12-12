@@ -1,9 +1,11 @@
+// src/components/ProductGrid.tsx
 "use client";
 
 import { useState } from "react";
 import ProductCard from "./ProductCard";
 
 interface Card {
+  id: string;
   name: string;
   description: string;
   image: string;
@@ -18,20 +20,14 @@ export default function ProductGrid({ data }: ProductGridProps) {
   const [visibleCount, setVisibleCount] = useState(6);
 
   const handleShowMore = () => {
-    setVisibleCount((prevCount) => prevCount + 6); // Load 6 more products
+    setVisibleCount((prevCount) => prevCount + 6);
   };
 
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-        {data.slice(0, visibleCount).map((card, index) => (
-          <ProductCard
-            key={index}
-            name={card.name}
-            description={card.description}
-            image={card.image}
-            price={card.price}
-          />
+        {data.slice(0, visibleCount).map((card) => (
+          <ProductCard key={card.id} {...card} />
         ))}
       </div>
       {visibleCount < data.length && (

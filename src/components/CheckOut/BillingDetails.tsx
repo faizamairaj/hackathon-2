@@ -15,7 +15,7 @@ interface BillingFormData {
   additionalInfo: string;
 }
 
-const BillingDetails = () => {
+export default function BillingDetails() {
   const [formData, setFormData] = useState<BillingFormData>({
     firstName: '',
     lastName: '',
@@ -38,24 +38,18 @@ const BillingDetails = () => {
     }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    // Handle form submission
-    console.log('Form data:', formData);
-  };
-
   return (
-    <div className="space-y-6">
-      <h2 className="text-2xl font-semibold">Billing Details</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <div className="flex flex-col md:flex-row gap-4">
+    <div className="bg-white p-6 rounded-lg shadow-md">
+      <h2 className="text-xl font-bold mb-6">Billing Details</h2>
+      <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
             name="firstName"
             value={formData.firstName}
             onChange={handleChange}
             placeholder="First Name"
-            className="w-full border border-gray-300 p-3 rounded-md"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
             required
           />
           <input
@@ -64,47 +58,52 @@ const BillingDetails = () => {
             value={formData.lastName}
             onChange={handleChange}
             placeholder="Last Name"
-            className="w-full border border-gray-300 p-3 rounded-md"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
             required
           />
         </div>
+
         <input
           type="text"
           name="company"
           value={formData.company}
           onChange={handleChange}
           placeholder="Company Name (Optional)"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
         />
+
         <select
           name="country"
           value={formData.country}
           onChange={handleChange}
-          className="w-full border border-gray-300 p-3 rounded-md"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
           required
         >
-          <option value="default">Country / Region</option>
-          <option value="Sri Lanka">Sri Lanka</option>
-          <option value="India">India</option>
-          <option value="USA">USA</option>
+          <option value="default">Select Country</option>
+          <option value="ID">Indonesia</option>
+          <option value="US">United States</option>
+          <option value="UK">United Kingdom</option>
+          <option value="JP">Japan</option>
         </select>
+
         <input
           type="text"
           name="street"
           value={formData.street}
           onChange={handleChange}
           placeholder="Street Address"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
           required
         />
-        <div className="flex flex-col md:flex-row gap-4">
+
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <input
             type="text"
             name="city"
             value={formData.city}
             onChange={handleChange}
-            placeholder="Town / City"
-            className="w-full border border-gray-300 p-3 rounded-md"
+            placeholder="City"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
             required
           />
           <input
@@ -113,54 +112,50 @@ const BillingDetails = () => {
             value={formData.province}
             onChange={handleChange}
             placeholder="Province"
-            className="w-full border border-gray-300 p-3 rounded-md"
+            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
             required
           />
         </div>
+
         <input
           type="text"
           name="zipCode"
           value={formData.zipCode}
           onChange={handleChange}
           placeholder="ZIP Code"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
           required
         />
+
         <input
           type="tel"
           name="phone"
           value={formData.phone}
           onChange={handleChange}
-          placeholder="Phone"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          placeholder="Phone Number"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
           required
         />
+
         <input
           type="email"
           name="email"
           value={formData.email}
           onChange={handleChange}
           placeholder="Email Address"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none"
           required
         />
+
         <textarea
           name="additionalInfo"
           value={formData.additionalInfo}
           onChange={handleChange}
-          placeholder="Additional Information"
-          className="w-full border border-gray-300 p-3 rounded-md"
+          placeholder="Additional Information (Optional)"
           rows={4}
+          className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#B88E2F] focus:outline-none resize-none"
         />
-        <button
-          type="submit"
-          className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition-colors"
-        >
-          Continue to Payment
-        </button>
-      </form>
+      </div>
     </div>
   );
-};
-
-export default BillingDetails;
+} 

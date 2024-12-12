@@ -1,9 +1,26 @@
-
+"use client";
 import BillingDetails from '@/components/BillingDetails';
 import Subtotal from '@/components/SubTotal';
 import PaymentMethod from '@/components/PaymentMethod';
+import { useEffect, useState } from 'react';
+import { useCart } from '@/context/CartContext';
+import { useRouter } from 'next/navigation';
 
 const Checkout = () => {
+  const [mounted, setMounted] = useState(false);
+  const { items } = useCart();
+  const router = useRouter();
+
+  useEffect(() => {
+    setMounted(true);
+    // Redirect if cart is empty
+    if (items.length === 0) {
+      router.push('/cart');
+    }
+  }, [items, router]);
+
+  if (!mounted) return null;
+
   return (
     <div>      
       <main className="max-w-6xl mx-auto px-4 py-8 space-y-8">

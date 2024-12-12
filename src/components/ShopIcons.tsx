@@ -1,31 +1,56 @@
-import React from 'react';
-import { FaTrophy, FaCheckCircle, FaGift, FaHeadphones } from 'react-icons/fa';
+import { Trophy, CheckCircle, Truck, Headphones } from 'lucide-react';
 
-const ShopIcons = () => {
+const features = [
+  {
+    icon: Trophy,
+    title: "High Quality",
+    description: "Crafted from top materials",
+    color: "#B88E2F"
+  },
+  {
+    icon: CheckCircle,
+    title: "Warranty Protection",
+    description: "Over 2 years",
+    color: "#B88E2F"
+  },
+  {
+    icon: Truck,
+    title: "Free Shipping",
+    description: "Order over 150,000",
+    color: "#B88E2F"
+  },
+  {
+    icon: Headphones,
+    title: "24/7 Support",
+    description: "Dedicated support",
+    color: "#B88E2F"
+  }
+];
+
+export default function ShopIcons() {
   return (
-    <div className="shop-icons">
-      <div className="icon-container">
-        <FaTrophy className="icon" />
-        <h3 className="icon-heading">High Quality</h3>
-        <p className="icon-text">Crafted from top materials</p>
-      </div>
-      <div className="icon-container">
-        <FaCheckCircle className="icon" />
-        <h3 className="icon-heading">Warranty Protection</h3>
-        <p className="icon-text">Over 2 years</p>
-      </div>
-      <div className="icon-container">
-        <FaGift className="icon" />
-        <h3 className="icon-heading">FREE Shipping</h3>
-        <p className="icon-text">Order over $150</p>
-      </div>
-      <div className="icon-container">
-        <FaHeadphones className="icon" />
-        <h3 className="icon-heading">24/7 Service</h3>
-        <p className="icon-text">Dedicated support</p>
+    <div className="bg-[#F9F1E7] py-16">
+      <div className="max-w-7xl mx-auto px-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          {features.map((feature, index) => {
+            const Icon = feature.icon;
+            return (
+              <div
+                key={index}
+                className="flex flex-col items-center text-center p-6 rounded-lg bg-white hover:shadow-lg transition-shadow group"
+              >
+                <div className="mb-4 p-3 rounded-full bg-[#F9F1E7] group-hover:bg-[#B88E2F] transition-colors">
+                  <Icon 
+                    className="w-8 h-8 text-[#B88E2F] group-hover:text-white transition-colors" 
+                  />
+                </div>
+                <h3 className="text-xl font-bold mb-2">{feature.title}</h3>
+                <p className="text-gray-600">{feature.description}</p>
+              </div>
+            )
+          })}
+        </div>
       </div>
     </div>
   );
-};
-
-export default ShopIcons;
+}
