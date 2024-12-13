@@ -1,5 +1,5 @@
 import React from 'react';
-import ContactForm from './ContactForm';
+import ContactForm from './Contact/ContactForm';
 import { FaLocationArrow, FaPhone, FaClock } from 'react-icons/fa';
 
 const ContactMe = () => {

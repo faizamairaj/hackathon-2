@@ -1,35 +1,45 @@
 // src/app/shop/page.tsx
 import dynamic from 'next/dynamic';
 import { Suspense } from 'react';
+import { Loader2 } from "lucide-react";
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-8">
+    <Loader2 className="w-8 h-8 animate-spin text-[#B88E2F]" />
+  </div>
+);
 
 // Dynamic imports with loading states
-const ShopCard = dynamic(() => import("@/components/ShopCard"), {
-  loading: () => <div>Loading shop card...</div>
+const ShopHero = dynamic(() => import("@/components/ShopHero"), {
+  loading: () => <LoadingSpinner />
 });
 
 const ShopBlowHero = dynamic(() => import("@/components/ShopBlowHero"), {
-  loading: () => <div>Loading hero section...</div>
+  loading: () => <LoadingSpinner />
 });
 
 const Products = dynamic(() => import("@/components/Products"), {
-  loading: () => <div>Loading products...</div>
+  loading: () => <LoadingSpinner />
 });
 
 const ShopIcons = dynamic(() => import("@/components/ShopIcons"), {
-  loading: () => <div>Loading shop icons...</div>
+  loading: () => <LoadingSpinner />
 });
 
 export default function ShopHomePage() {
   return (
-    <div className="max-w-[1440px] mx-auto">
-      <Suspense fallback={<div>Loading page...</div>}>
-        <ShopCard />
-        <div className="section-spacing"></div>
-        <ShopBlowHero />
-        <div className="section-spacing"></div>
-        <Products />
-        <div className="section-spacing"></div>
-        <ShopIcons />
+    <div className="w-full">
+      <Suspense fallback={<LoadingSpinner />}>
+        <ShopHero />
+        <div className="container mx-auto">
+          <div className="section-spacing" />
+          <ShopBlowHero />
+          <div className="section-spacing" />
+          <Products />
+          <div className="section-spacing" />
+          <ShopIcons />
+        </div>
       </Suspense>
     </div>
   );
