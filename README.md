@@ -40,7 +40,7 @@
 2. Install dependencies:
 
    ```bash
-   cd funiro
+   cd hackathon-2
    npm install
    ```
 
