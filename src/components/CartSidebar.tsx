@@ -1,10 +1,12 @@
 "use client";
+import { useEffect, useState } from 'react';
 import { useCart } from "@/context/CartContext";
 import { X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { formatPrice } from "@/utils/formatPrice";
 
 export default function CartSidebar() {
+  const [mounted, setMounted] = useState(false);
   const router = useRouter();
   const { 
     isCartOpen, 
@@ -15,10 +17,16 @@ export default function CartSidebar() {
     totalPrice 
   } = useCart();
 
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleCheckout = () => {
     setIsCartOpen(false);
     router.push('/checkout');
   };
+
+  if (!mounted) return null;
 
   if (!isCartOpen) return null;
 

@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
+import { formatPrice } from '@/utils/formatPrice';
 
 interface CartItem {
   id: string;
@@ -21,6 +22,9 @@ interface CartContextType {
   totalPrice: number;
   shippingCost: number;
   taxRate: number;
+  subtotal: number;
+  tax: number;
+  total: number;
 }
 
 const CartContext = createContext<CartContextType | undefined>(undefined);
@@ -84,9 +88,25 @@ export function CartProvider({ children }: { children: ReactNode }) {
   };
 
   const totalItems = items.reduce((total, item) => total + item.quantity, 0);
-  const subtotal = items.reduce((total, item) => total + (item.price * item.quantity), 0);
-  const tax = subtotal * taxRate;
-  const totalPrice = subtotal + shippingCost + tax;
+
+  const calculateTotals = () => {
+    const subtotal = items.reduce((total, item) => {
+      const itemPrice = formatPrice.toNumber(item.price);
+      return total + (itemPrice * item.quantity);
+    }, 0);
+
+    const tax = subtotal * taxRate;
+    const total = subtotal + tax + shippingCost;
+
+    return {
+      subtotal,
+      tax,
+      total
+    };
+  };
+
+  // Use the calculated totals in your context
+  const { subtotal, tax, total } = calculateTotals();
 
   return (
     <CartContext.Provider value={{
@@ -98,9 +118,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
       isCartOpen,
       setIsCartOpen,
       totalItems,
-      totalPrice,
+      totalPrice: total,
       shippingCost,
-      taxRate
+      taxRate,
+      subtotal,
+      tax,
+      total,
     }}>
       {children}
     </CartContext.Provider>

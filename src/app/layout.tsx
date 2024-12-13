@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import CartSidebar from "@/components/CartSidebar";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { CompareProvider } from "@/context/CompareContext";
+import Container from '@/components/common/Container';
 
 const sansFont = localFont({
   src: "./fonts/GeistVF.woff",
@@ -37,7 +38,9 @@ export default function RootLayout({
           <WishlistProvider>
             <CompareProvider>
               <Header />
-              <main>{children}</main>
+              <Container>
+                <main>{children}</main>
+              </Container>
               <CartSidebar />
               <Footer />
             </CompareProvider>

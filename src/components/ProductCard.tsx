@@ -80,7 +80,7 @@ export default function ProductCard({
     name,
     description,
     image,
-    price: formatPrice.parseRupiah(price),
+    price: formatPrice.parsePrice(price),
   };
 
   return (
@@ -145,7 +145,7 @@ export default function ProductCard({
               <p className="text-sm text-gray-500 mt-1">{description}</p>
             </div>
             <span className="text-lg font-bold text-blue-600">
-              {price}
+              {typeof price === 'string' ? price : formatPrice.toRupiah(price)}
             </span>
           </div>
 

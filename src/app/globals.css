@@ -530,3 +530,12 @@ footer .para p{
   left: 13%;
   padding: 2rem 0rem;
 }
+
+.full-width {
+  width: 100vw;
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+}
