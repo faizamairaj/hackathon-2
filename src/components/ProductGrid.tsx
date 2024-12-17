@@ -9,7 +9,9 @@ interface Card {
   name: string;
   description: string;
   image: string;
-  price: string;
+  price: number;
+  salePrice?: number;
+  salePercentage?: number;
 }
 
 interface ProductGridProps {

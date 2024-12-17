@@ -1,29 +1,21 @@
 import type { Metadata } from "next";
-import localFont from "next/font/local";
+import { Poppins } from "next/font/google";
+import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
-import "@/app/globals.css";
 import { CartProvider } from "@/context/CartContext";
-import CartSidebar from "@/components/CartSidebar";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { CompareProvider } from "@/context/CompareContext";
-import Container from '@/components/common/Container';
+import CartSidebar from "@/components/Cart/CartSidebar";
 
-const sansFont = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-sans",
-  weight: "100 900",
-});
-
-const monoFont = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-mono",
-  weight: "100 900",
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"],
 });
 
 export const metadata: Metadata = {
-  title: "E-Commerce Store",
-  description: "A Next.js e-commerce platform",
+  title: "Funiro - Furniture Store",
+  description: "Discover beautiful furniture for your home",
 };
 
 export default function RootLayout({
@@ -33,16 +25,16 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${sansFont.variable} ${monoFont.variable} bg-gray-100`}>
+      <body className={poppins.className}>
         <CartProvider>
           <WishlistProvider>
             <CompareProvider>
-              <Header />
-              <Container>
-                <main>{children}</main>
-              </Container>
-              <CartSidebar />
-              <Footer />
+              <div className="flex flex-col min-h-screen bg-white">
+                <Header />
+                <main className="flex-grow pt-[100px]">{children}</main>
+                <Footer />
+                <CartSidebar />
+              </div>
             </CompareProvider>
           </WishlistProvider>
         </CartProvider>

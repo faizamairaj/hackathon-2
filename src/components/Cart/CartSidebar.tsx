@@ -1,10 +1,11 @@
 "use client";
-import { useCart } from "@/context/CartContext";
-import { motion, AnimatePresence } from "framer-motion";
-import { X, ShoppingBag, Trash2, Plus, Minus } from "lucide-react";
-import { useRouter } from "next/navigation";
-import Image from "next/image";
-import { formatPrice } from "@/utils/formatPrice";
+import { useState, useEffect } from 'react';
+import { useRouter } from 'next/navigation';
+import { motion, AnimatePresence } from 'framer-motion';
+import { ShoppingBag, X, Plus, Minus, Trash2 } from 'lucide-react';
+import { useCart } from '@/context/CartContext';
+import { formatPrice } from '@/utils/formatPrice';
+import Image from 'next/image';
 
 export default function CartSidebar() {
   const router = useRouter();
@@ -25,6 +26,11 @@ export default function CartSidebar() {
   const itemVariants = {
     hidden: { opacity: 0, x: 20 },
     visible: { opacity: 1, x: 0 }
+  };
+
+  const handleViewCart = () => {
+    setIsCartOpen(false);
+    router.push('/cart');
   };
 
   if (!isCartOpen) return null;
@@ -64,39 +70,24 @@ export default function CartSidebar() {
           </div>
 
           {/* Cart Items */}
-          <div className="flex-1 overflow-y-auto p-6">
+          <div className="flex-1 overflow-y-auto max-h-[calc(100vh-200px)]">
             {items.length === 0 ? (
-              <div className="flex flex-col items-center justify-center h-full text-gray-500">
-                <ShoppingBag className="w-16 h-16 mb-4 text-gray-300" />
-                <p className="text-lg font-medium mb-2">Your cart is empty</p>
-                <button
-                  onClick={() => {
-                    setIsCartOpen(false);
-                    router.push('/shop');
-                  }}
-                  className="text-[#B88E2F] hover:underline"
-                >
-                  Continue Shopping
-                </button>
+              <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+                <ShoppingBag className="w-16 h-16 text-gray-300 mb-4" />
+                <p className="text-gray-500">Your cart is empty</p>
               </div>
             ) : (
-              <motion.div 
+              <motion.div
                 initial="hidden"
                 animate="visible"
-                variants={{
-                  visible: {
-                    transition: {
-                      staggerChildren: 0.1
-                    }
-                  }
-                }}
-                className="space-y-6"
+                className="p-6 space-y-6"
               >
-                {items.map((item) => (
+                {items.map((item, index) => (
                   <motion.div
                     key={item.id}
                     variants={itemVariants}
-                    className="flex gap-4 p-4 bg-white rounded-lg shadow-sm border"
+                    transition={{ delay: index * 0.1 }}
+                    className="flex gap-4 pb-6 border-b last:border-b-0"
                   >
                     <div className="relative w-20 h-20 rounded-md overflow-hidden">
                       <Image
@@ -143,24 +134,35 @@ export default function CartSidebar() {
 
           {/* Footer */}
           {items.length > 0 && (
-            <div className="border-t p-6 bg-gray-50">
-              <div className="flex justify-between mb-4">
+            <div className="border-t p-6 bg-gray-50 space-y-4">
+              <div className="flex justify-between items-center">
                 <span className="font-medium">Total:</span>
                 <span className="font-bold text-lg">
                   {formatPrice.toRupiah(total)}
                 </span>
               </div>
-              <button
-                onClick={() => {
-                  setIsCartOpen(false);
-                  router.push('/checkout');
-                }}
-                className="w-full bg-[#B88E2F] text-white py-3 rounded-lg
-                  hover:bg-[#A07B2A] transition-colors duration-300
-                  focus:ring-2 focus:ring-[#B88E2F] focus:ring-offset-2"
-              >
-                Proceed to Checkout
-              </button>
+              
+              <div className="grid grid-cols-2 gap-4">
+                <button
+                  onClick={handleViewCart}
+                  className="w-full px-4 py-3 border-2 border-[#B88E2F] text-[#B88E2F] rounded-lg
+                    hover:bg-[#B88E2F]/10 transition-colors duration-300
+                    focus:ring-2 focus:ring-[#B88E2F] focus:ring-offset-2"
+                >
+                  View Cart
+                </button>
+                <button
+                  onClick={() => {
+                    setIsCartOpen(false);
+                    router.push('/checkout');
+                  }}
+                  className="w-full bg-[#B88E2F] text-white py-3 rounded-lg
+                    hover:bg-[#A07B2A] transition-colors duration-300
+                    focus:ring-2 focus:ring-[#B88E2F] focus:ring-offset-2"
+                >
+                  Checkout
+                </button>
+              </div>
             </div>
           )}
         </motion.div>

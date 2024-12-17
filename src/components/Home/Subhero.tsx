@@ -6,9 +6,24 @@ import Living from '@/Pictures/living.png';
 import Bedroom from '@/Pictures/bedroom.png';
 
 const categories = [
-  { name: 'Dining', image: Dining, delay: 0.2 },
-  { name: 'Living', image: Living, delay: 0.4 },
-  { name: 'Bedroom', image: Bedroom, delay: 0.6 }
+  { 
+    name: 'Dining Room',
+    image: Dining,
+    delay: 0.2,
+    description: 'Elegant dining sets for memorable meals'
+  },
+  { 
+    name: 'Living Room',
+    image: Living,
+    delay: 0.4,
+    description: 'Comfortable spaces for family moments'
+  },
+  { 
+    name: 'Bedroom',
+    image: Bedroom,
+    delay: 0.6,
+    description: 'Peaceful retreats for perfect rest'
+  }
 ];
 
 const SubHero = () => {
@@ -31,12 +46,12 @@ const SubHero = () => {
           transition={{ delay: 0.3 }}
           className="text-gray-600 max-w-2xl mx-auto"
         >
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+          Discover our curated collection of beautiful furniture for every room
         </motion.p>
       </motion.div>
 
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {categories.map((category, index) => (
+        {categories.map((category) => (
           <motion.div
             key={category.name}
             initial={{ opacity: 0, scale: 0.8 }}
@@ -73,6 +88,9 @@ const SubHero = () => {
                 <h3 className="text-2xl font-bold text-[#B88E2F] group-hover:text-[#A07B2A] transition-colors">
                   {category.name}
                 </h3>
+                <p className="text-gray-600 mt-2 group-hover:text-gray-700 transition-colors">
+                  {category.description}
+                </p>
                 
                 {/* Decorative Line */}
                 <div className="w-16 h-1 bg-[#B88E2F] mx-auto mt-4 transform origin-left transition-all duration-300 group-hover:w-24" />
@@ -89,14 +107,13 @@ const SubHero = () => {
                 px-6 py-2 rounded-full text-[#B88E2F] font-medium
                 opacity-0 group-hover:opacity-100 transition-all duration-300
                 hover:bg-[#B88E2F] hover:text-white transform hover:scale-105"
-            >
-              Explore {category.name}
+            >              
             </motion.button>
           </motion.div>
         ))}
       </div>
     </section>
   );
-};
+}
 
 export default SubHero;

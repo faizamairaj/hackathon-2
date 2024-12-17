@@ -1,8 +1,10 @@
 "use client";
 
 import ProductDetails from "@/components/ProductDetails";
+import Slides from "@/components/Home/Slides";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
+import { products } from "@/data/products";
 
 // Define the Product type
 interface Product {
@@ -10,10 +12,20 @@ interface Product {
   name: string;
   description: string;
   price: number;
+  salePrice?: number;
+  salePercentage?: number;
   imageUrl: string;
   colors: string[];
   ratings: number;
   stock?: number;
+  category?: string;
+  materials?: string[];
+  dimensions?: {
+    width: number;
+    height: number;
+    depth: number;
+  };
+  additionalImages?: string[];
 }
 
 const ProductPage = ({ params }: { params: { productId: string } }) => {
@@ -23,22 +35,17 @@ const ProductPage = ({ params }: { params: { productId: string } }) => {
 
   useEffect(() => {
     setMounted(true);
-    // Simulate fetching product data
+    // Find product from our data
     const fetchProduct = async () => {
       try {
-        // Mock data - replace with actual API call
-        const mockProduct = {
-          id: params.productId,
-          name: `Luxury Furniture ${params.productId}`,
-          description: "Premium quality furniture piece crafted with attention to detail and comfort in mind.",
-          price: 2500000, // Price in Rupiah
-          imageUrl: "/Hero.png",
-          colors: ["#1a1a1a", "#8B4513", "#DEB887"],
-          ratings: 4.5,
-          stock: 15
-        };
-
-        setProduct(mockProduct);
+        const foundProduct = products.find(p => p.id === params.productId);
+        if (foundProduct) {
+          // Transform the data to match our component props
+          setProduct({
+            ...foundProduct,
+            imageUrl: foundProduct.image,
+          });
+        }
       } catch (error) {
         console.error("Error fetching product:", error);
       } finally {
@@ -75,6 +82,11 @@ const ProductPage = ({ params }: { params: { productId: string } }) => {
     <div className="min-h-screen bg-gradient-to-b from-gray-50 to-white">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
         <ProductDetails {...product} />
+        
+        <div className="mt-16">
+          <h2 className="text-3xl font-bold text-center mb-8">You May Also Like</h2>
+          <Slides />
+        </div>
       </div>
     </div>
   );
