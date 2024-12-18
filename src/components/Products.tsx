@@ -4,7 +4,11 @@ import ProductGrid from "./ProductGrid";
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 
-export default function Products() {
+interface ProductsProps {
+  products?: any[];
+}
+
+export default function Products({ products }: ProductsProps) {
   const [isVisible, setIsVisible] = useState(false);
   const [mounted, setMounted] = useState(false);
 
@@ -13,7 +17,7 @@ export default function Products() {
     setMounted(true);
   }, []);
 
-  const data = [
+  const defaultProducts = [
     {
       id: "1",
       name: "Syltherine",
@@ -84,6 +88,8 @@ export default function Products() {
 
   if (!mounted) return null;
 
+  const displayProducts = products || defaultProducts;
+
   return (
     <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
       <motion.div
@@ -105,8 +111,22 @@ export default function Products() {
         animate={{ opacity: isVisible ? 1 : 0, y: isVisible ? 0 : 40 }}
         transition={{ duration: 0.8, delay: 0.2 }}
       >
-        <ProductGrid data={data} />
+        <ProductGrid data={displayProducts} />
       </motion.div>
+
+      {/* No Results Message */}
+      {displayProducts.length === 0 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ duration: 0.5 }}
+          className="text-center py-12"
+        >
+          <p className="text-gray-600 text-lg">
+            No products match your current filters. Try adjusting your search criteria.
+          </p>
+        </motion.div>
+      )}
 
       {/* Background Elements */}
       <div className="absolute top-0 left-0 w-full h-full overflow-hidden -z-10">

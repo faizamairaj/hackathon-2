@@ -8,6 +8,9 @@ interface CartItem {
   price: number;
   image: string;
   quantity: number;
+  color?: string;
+  features?: any;
+  description?: string;
 }
 
 interface CartContextType {
@@ -52,17 +55,19 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const addToCart = (product: CartItem) => {
     setItems(currentItems => {
-      const existingItem = currentItems.find(item => item.id === product.id);
+      const existingItem = currentItems.find(item => 
+        item.id === product.id && item.color === product.color
+      );
+      
       if (existingItem) {
         return currentItems.map(item =>
-          item.id === product.id
+          item.id === product.id && item.color === product.color
             ? { ...item, quantity: item.quantity + product.quantity }
             : item
         );
       }
-      return [...currentItems, product];
+      return [...currentItems, { ...product, quantity: product.quantity || 1 }];
     });
-    // Show cart sidebar when item is added
     setIsCartOpen(true);
   };
 

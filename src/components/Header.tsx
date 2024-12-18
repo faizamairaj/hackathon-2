@@ -9,6 +9,8 @@ import { GoHeart } from "react-icons/go";
 import { AiOutlineShoppingCart, AiOutlineMenu, AiOutlineClose } from "react-icons/ai";
 import { useCart } from "@/context/CartContext";
 import { motion, AnimatePresence } from "framer-motion";
+import { Scale } from "lucide-react";
+import { useCompare } from "@/context/CompareContext";
 
 const navLinks = [
   { href: "/", label: "Home" },
@@ -21,6 +23,7 @@ export default function Header() {
   const { setIsCartOpen, totalItems } = useCart();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const { items: compareItems } = useCompare();
 
   useEffect(() => {
     setMounted(true);
@@ -88,6 +91,18 @@ export default function Header() {
               )}
             </button>
           )}
+          <Link
+            href="/compare"
+            className="relative text-gray-600 text-2xl hover:text-[#B88E2F] transition duration-200"
+            aria-label="Compare Products"
+          >
+            <Scale className="w-6 h-6" />
+            {compareItems.length > 0 && (
+              <span className="absolute -top-2 -right-2 bg-[#B88E2F] text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
+                {compareItems.length}
+              </span>
+            )}
+          </Link>
 
           {/* Mobile Menu Button */}
           <button

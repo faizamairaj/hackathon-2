@@ -1,19 +1,71 @@
+"use client";
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { Loader2 } from "lucide-react";
+import Products from '@/components/Products';
 
-// src/app/page.tsx
-import Hero from "@/components/Home/Hero";
-import Products from "@/components/Products";
-import Slides from "@/components/Home/Slides";
-import SubHero from "@/components/Home/Subhero";
-import ImageGallery from "@/components/Home/ImageGallery";
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-8">
+    <Loader2 className="w-8 h-8 animate-spin text-[#B88E2F]" />
+  </div>
+);
 
-export default function Home() {
+// Dynamic imports with loading states
+const Hero = dynamic(() => import("@/components/Home/Hero"), {
+  loading: () => <LoadingSpinner />
+});
+
+const Subhero = dynamic(() => import("@/components/Home/Subhero"), {
+  loading: () => <LoadingSpinner />
+});
+
+const ImageGallery = dynamic(() => import("@/components/Home/ImageGallery"), {
+  loading: () => <LoadingSpinner />
+});
+
+const Slides = dynamic(() => import("@/components/Home/Slides"), {
+  loading: () => <LoadingSpinner />
+});
+
+const FeaturedCollection = dynamic(() => import("@/components/FeaturedCollection"), {
+  loading: () => <LoadingSpinner />
+});
+
+const TestimonialCarousel = dynamic(() => import("@/components/TestimonialCarousel"), {
+  loading: () => <LoadingSpinner />
+});
+
+const CategoryShowcase = dynamic(() => import("@/components/CategoryShowcase"), {
+  loading: () => <LoadingSpinner />
+});
+
+const NewsletterSignup = dynamic(() => import("@/components/NewsletterSignup"), {
+  loading: () => <LoadingSpinner />
+});
+
+export default function HomePage() {
   return (
-    <>
-      <Hero />
-      <SubHero />
-      <Products />
-      <Slides />
-      <ImageGallery />
-    </>
+    <main className="w-full">
+      <Suspense fallback={<LoadingSpinner />}>
+        <Hero />
+        <div className="section-spacing" />
+        <Subhero />
+        <div className="section-spacing" />
+        <FeaturedCollection />
+        <div className="section-spacing" />
+        <Products/>
+        <div className="section-spacing" />
+        <ImageGallery />
+        <div className="section-spacing" />
+        <CategoryShowcase />
+        <div className="section-spacing" />
+        <Slides />
+        <div className="section-spacing" />
+        <TestimonialCarousel />
+        <div className="section-spacing" />
+        <NewsletterSignup />
+      </Suspense>
+    </main>
   );
 }

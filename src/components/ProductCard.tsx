@@ -7,17 +7,7 @@ import { useCompare } from "@/context/CompareContext";
 import QuickView from "./QuickView";
 import { formatPrice } from "@/utils/formatPrice";
 import Image from 'next/image';
-
-interface ProductCardProps {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  salePrice?: number;
-  salePercentage?: number;
-  viewMode?: 'grid' | 'list';
-}
+import { Product, ProductCardProps } from "@/types/product";
 
 const actionButtonClasses = `
   inline-flex items-center gap-1 px-2 py-1 rounded-full text-xs font-medium
@@ -39,7 +29,7 @@ export default function ProductCard({
   const [mounted, setMounted] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const { isInWishlist, toggleWishlist } = useWishlist();
-  const { isInCompare, toggleCompare } = useCompare();
+  const { items, addToCompare, removeFromCompare } = useCompare();
   const [showQuickView, setShowQuickView] = useState(false);
 
   useEffect(() => {
@@ -51,10 +41,44 @@ export default function ProductCard({
     name,
     description,
     image,
+    images: [image],
     price: salePrice || price,
     originalPrice: price,
     salePrice,
-    salePercentage
+    salePercentage,
+    features: {
+      highlights: [
+        `Premium ${name} with exceptional quality`,
+        'Handcrafted with attention to detail',
+        'Perfect for modern living spaces',
+        'Sustainable materials'
+      ],
+      specifications: {
+        dimensions: '60cm x 80cm x 55cm',
+        weight: '25 kg',
+        material: 'Premium Wood, Metal Accents',
+        color: ['Natural', 'Walnut', 'Oak'],
+        warranty: '2 Years Limited Warranty',
+        inStock: true,
+        stockCount: Math.floor(Math.random() * 50) + 10
+      },
+      rating: 4.5,
+      reviewCount: Math.floor(Math.random() * 100) + 50,
+      category: 'Furniture',
+      tags: ['modern', 'furniture', 'premium'],
+      brand: 'Luxura Living',
+      sku: `SKU-${id}`,
+      manufacturingDate: new Date().toISOString().split('T')[0]
+    },
+    isNew: Math.random() > 0.7,
+    isBestSeller: Math.random() > 0.8,
+    availableSizes: ['Standard', 'Large'],
+    availableColors: ['Natural', 'Walnut', 'Oak'],
+    shippingInfo: {
+      freeShipping: price > 1000000,
+      estimatedDays: 3,
+      shippingCost: price > 1000000 ? 0 : 50000
+    }
   };
 
   const handleCardClick = () => {
@@ -95,7 +119,34 @@ export default function ProductCard({
   }
 
   const isLiked = isInWishlist(id);
-  const isComparing = isInCompare(id);
+  const isComparing = items.some(item => item.id === id);
+
+  const toggleCompare = (product: Product) => {
+    if (isComparing) {
+      removeFromCompare(product);
+    } else {
+      addToCompare(product);
+    }
+  };
+
+  const isInCompare = items.some(item => item.id === id);
+
+  const handleCompareClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (isInCompare) {
+      removeFromCompare(product);
+    } else if (items.length >= 4) {
+      alert('You can only compare up to 4 products at a time');
+    } else {
+      addToCompare(product);
+      const shouldNavigate = confirm('Product added to comparison. Would you like to view the comparison?');
+      if (shouldNavigate) {
+        router.push('/compare');
+      }
+    }
+  };
 
   return (
     <>
@@ -199,10 +250,7 @@ export default function ProductCard({
               </button>
 
               <button
-                onClick={(e) => {
-                  e.stopPropagation();
-                  toggleCompare(product);
-                }}
+                onClick={handleCompareClick}
                 className={`${actionButtonClasses}
                   ${isComparing 
                     ? 'bg-blue-600 text-white' 

@@ -1,13 +1,38 @@
-import { BlogHero, BlogGrid, Newsletter } from "../../components/Blog";
+"use client";
+import dynamic from 'next/dynamic';
+import { Suspense } from 'react';
+import { Loader2 } from "lucide-react";
+
+// Loading component
+const LoadingSpinner = () => (
+  <div className="flex items-center justify-center p-8">
+    <Loader2 className="w-8 h-8 animate-spin text-[#B88E2F]" />
+  </div>
+);
+
+// Dynamic imports with loading states
+const BlogHero = dynamic(() => import("@/components/Blog/BlogHero"), {
+  loading: () => <LoadingSpinner />
+});
+
+const BlogGrid = dynamic(() => import("@/components/Blog/BlogGrid"), {
+  loading: () => <LoadingSpinner />
+});
+
+const NewsletterSignup = dynamic(() => import("@/components/NewsletterSignup"), {
+  loading: () => <LoadingSpinner />
+});
 
 export default function BlogPage() {
   return (
-    <div className="min-h-screen bg-white">
-      <BlogHero />
-      <div className="max-w-7xl mx-auto px-4 py-16">
+    <main className="w-full">
+      <Suspense fallback={<LoadingSpinner />}>
+        <BlogHero />
+        <div className="section-spacing" />
         <BlogGrid />
-      </div>
-      <Newsletter />
-    </div>
+        <div className="section-spacing" />
+        <NewsletterSignup />
+      </Suspense>
+    </main>
   );
 } 

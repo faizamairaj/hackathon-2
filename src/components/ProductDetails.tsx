@@ -4,28 +4,10 @@
 import React, { useState } from "react";
 import { Heart, ShoppingCart, Scale, Star, Share2 } from "lucide-react";
 import { useCart } from "@/context/CartContext";
+import { useWishlist } from "@/context/WishlistContext";
+import { useCompare } from "@/context/CompareContext";
 import { formatPrice } from "@/utils/formatPrice";
-
-type ProductDetailsProps = {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  salePrice?: number;
-  salePercentage?: number;
-  imageUrl: string;
-  colors: string[];
-  ratings: number;
-  stock?: number;
-  category?: string;
-  materials?: string[];
-  dimensions?: {
-    width: number;
-    height: number;
-    depth: number;
-  };
-  additionalImages?: string[];
-};
+import { ProductDetailsProps } from "@/types/product";
 
 const ProductDetails: React.FC<ProductDetailsProps> = ({
   id,
@@ -35,20 +17,24 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
   salePrice,
   salePercentage,
   imageUrl,
+  images,
+  features,
   colors,
   ratings,
-  stock = 10,
-  category,
-  materials,
-  dimensions,
-  additionalImages
+  isNew,
+  isBestSeller,
+  shippingInfo,
+  availableSizes,
+  availableColors
 }) => {
   const { addToCart } = useCart();
+  const { isInWishlist, toggleWishlist } = useWishlist();
+  const { items: compareItems, addToCompare, removeFromCompare } = useCompare();
   const [selectedColor, setSelectedColor] = useState(colors[0]);
   const [quantity, setQuantity] = useState(1);
-  const [isWishlist, setIsWishlist] = useState(false);
-  const [isCompare, setIsCompare] = useState(false);
   const [selectedImage, setSelectedImage] = useState(imageUrl);
+
+  const isInCompare = compareItems.some(item => item.id === id);
 
   const handleAddToCart = () => {
     addToCart({
@@ -56,8 +42,28 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
       name,
       price: salePrice || price,
       image: imageUrl,
-      quantity: quantity
+      quantity: quantity,
+      color: selectedColor,
+      features: features,
+      description: description
     });
+  };
+
+  const product = {
+    id,
+    name,
+    description,
+    image: imageUrl,
+    images,
+    price,
+    salePrice,
+    salePercentage,
+    features,
+    isNew,
+    isBestSeller,
+    availableSizes,
+    availableColors,
+    shippingInfo
   };
 
   return (
@@ -85,9 +91,9 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
           </div>
 
           {/* Thumbnail Images */}
-          {additionalImages && additionalImages.length > 0 && (
+          {images && images.length > 0 && (
             <div className="flex gap-2 overflow-x-auto pb-2">
-              {additionalImages.map((img, index) => (
+              {images.map((img, index) => (
                 <button
                   key={index}
                   onClick={() => setSelectedImage(img)}
@@ -111,7 +117,7 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
             <div className="flex items-center gap-2 text-sm text-gray-500 mb-2">
               <span>Home</span>
               <span>/</span>
-              <span>{category}</span>
+              <span>{features.category}</span>
             </div>
             <h1 className="text-4xl font-bold text-gray-800">{name}</h1>
             <div className="flex items-center mt-2 space-x-4">
@@ -126,9 +132,13 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
                     }`}
                   />
                 ))}
-                <span className="ml-2 text-gray-600">({ratings} ratings)</span>
+                <span className="ml-2 text-gray-600">({features.reviewCount} reviews)</span>
               </div>
-              <span className="text-green-600">In Stock ({stock} available)</span>
+              <span className="text-green-600">
+                {features.specifications.inStock ? 
+                  `In Stock (${features.specifications.stockCount} available)` : 
+                  'Out of Stock'}
+              </span>
             </div>
           </div>
 
@@ -155,21 +165,21 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
               </div>
               <div className="flex items-center space-x-2">
                 <button
-                  onClick={() => setIsWishlist(!isWishlist)}
+                  onClick={() => toggleWishlist(product)}
                   className={`p-2 rounded-full ${
-                    isWishlist
+                    isInWishlist(id)
                       ? "bg-red-50 text-red-500"
                       : "bg-gray-100 text-gray-600"
                   }`}
                 >
                   <Heart
-                    className={`w-6 h-6 ${isWishlist ? "fill-current" : ""}`}
+                    className={`w-6 h-6 ${isInWishlist(id) ? "fill-current" : ""}`}
                   />
                 </button>
                 <button
-                  onClick={() => setIsCompare(!isCompare)}
+                  onClick={() => isInCompare ? removeFromCompare(product) : addToCompare(product)}
                   className={`p-2 rounded-full ${
-                    isCompare
+                    isInCompare
                       ? "bg-blue-50 text-blue-500"
                       : "bg-gray-100 text-gray-600"
                   }`}
@@ -180,43 +190,32 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
             </div>
           </div>
 
-          {materials && materials.length > 0 && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Materials</h3>
-              <div className="flex flex-wrap gap-2">
-                {materials.map((material) => (
-                  <span
-                    key={material}
-                    className="px-3 py-1 bg-gray-100 rounded-full text-sm text-gray-700"
-                  >
-                    {material}
-                  </span>
-                ))}
+          <div>
+            <h3 className="text-lg font-semibold mb-2">Specifications</h3>
+            <div className="space-y-2">
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Dimensions:</span>
+                <span className="font-medium">{features.specifications.dimensions}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Weight:</span>
+                <span className="font-medium">{features.specifications.weight}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Material:</span>
+                <span className="font-medium">{features.specifications.material}</span>
+              </div>
+              <div className="flex justify-between text-sm">
+                <span className="text-gray-600">Warranty:</span>
+                <span className="font-medium">{features.specifications.warranty}</span>
               </div>
             </div>
-          )}
-
-          {dimensions && (
-            <div>
-              <h3 className="text-lg font-semibold mb-2">Dimensions</h3>
-              <div className="flex gap-4 text-sm text-gray-600">
-                <div>
-                  <span className="font-medium">Width:</span> {dimensions.width}cm
-                </div>
-                <div>
-                  <span className="font-medium">Height:</span> {dimensions.height}cm
-                </div>
-                <div>
-                  <span className="font-medium">Depth:</span> {dimensions.depth}cm
-                </div>
-              </div>
-            </div>
-          )}
+          </div>
 
           <div>
             <h3 className="text-lg font-semibold">Select Color</h3>
             <div className="flex mt-2 space-x-3">
-              {colors.map((color) => (
+              {features.specifications.color.map((color) => (
                 <button
                   key={color}
                   className={`w-10 h-10 rounded-full border-2 transition-all duration-200 ${
@@ -231,35 +230,47 @@ const ProductDetails: React.FC<ProductDetailsProps> = ({
             </div>
           </div>
 
-          <div>
-            <h3 className="text-lg font-semibold">Quantity</h3>
-            <div className="flex items-center mt-2">
-              <button
-                onClick={() => setQuantity((q) => Math.max(q - 1, 1))}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-l-lg transition-colors"
-              >
-                -
-              </button>
-              <span className="px-6 py-2 border-y bg-white">{quantity}</span>
-              <button
-                onClick={() => setQuantity((q) => Math.min(q + 1, stock))}
-                className="px-4 py-2 bg-gray-100 hover:bg-gray-200 rounded-r-lg transition-colors"
-              >
-                +
-              </button>
+          <div className="flex items-center gap-4 mt-6">
+            <div>
+              <h3 className="text-lg font-semibold mb-2">Quantity</h3>
+              <div className="flex items-center border rounded-lg">
+                <button
+                  onClick={() => setQuantity((q) => Math.max(q - 1, 1))}
+                  className="px-4 py-2 text-lg font-medium hover:bg-gray-100 rounded-l-lg transition-colors"
+                >
+                  -
+                </button>
+                <input
+                  type="number"
+                  value={quantity}
+                  onChange={(e) => {
+                    const val = parseInt(e.target.value);
+                    if (!isNaN(val) && val >= 1 && val <= (features.specifications.stockCount || 99)) {
+                      setQuantity(val);
+                    }
+                  }}
+                  className="w-16 text-center py-2 border-x focus:outline-none"
+                  min="1"
+                  max={features.specifications.stockCount || 99}
+                />
+                <button
+                  onClick={() => setQuantity((q) => 
+                    Math.min(q + 1, features.specifications.stockCount || 99)
+                  )}
+                  className="px-4 py-2 text-lg font-medium hover:bg-gray-100 rounded-r-lg transition-colors"
+                >
+                  +
+                </button>
+              </div>
             </div>
-          </div>
 
-          <div className="flex space-x-4">
             <button
               onClick={handleAddToCart}
-              className="flex-1 flex items-center justify-center space-x-2 bg-blue-600 text-white py-3 px-6 rounded-lg hover:bg-blue-700 transition-colors"
+              className="flex-1 flex items-center justify-center gap-2 bg-[#B88E2F] text-white px-8 py-3 rounded-lg hover:bg-[#A07B2A] transition-colors"
+              disabled={!features.specifications.inStock}
             >
               <ShoppingCart className="w-5 h-5" />
-              <span>Add to Cart</span>
-            </button>
-            <button className="flex-1 border-2 border-blue-600 text-blue-600 py-3 px-6 rounded-lg hover:bg-blue-50 transition-colors">
-              Buy Now
+              Add to Cart
             </button>
           </div>
         </div>

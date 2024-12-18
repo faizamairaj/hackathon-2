@@ -5,46 +5,52 @@ import Slides from "@/components/Home/Slides";
 import { useEffect, useState } from "react";
 import { Loader2 } from "lucide-react";
 import { products } from "@/data/products";
-
-// Define the Product type
-interface Product {
-  id: string;
-  name: string;
-  description: string;
-  price: number;
-  salePrice?: number;
-  salePercentage?: number;
-  imageUrl: string;
-  colors: string[];
-  ratings: number;
-  stock?: number;
-  category?: string;
-  materials?: string[];
-  dimensions?: {
-    width: number;
-    height: number;
-    depth: number;
-  };
-  additionalImages?: string[];
-}
+import { Product, ProductDetailsProps } from "@/types/product";
 
 const ProductPage = ({ params }: { params: { productId: string } }) => {
-  const [product, setProduct] = useState<Product | null>(null);
+  const [product, setProduct] = useState<ProductDetailsProps | null>(null);
   const [loading, setLoading] = useState(true);
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
     setMounted(true);
-    // Find product from our data
     const fetchProduct = async () => {
       try {
         const foundProduct = products.find(p => p.id === params.productId);
         if (foundProduct) {
-          // Transform the data to match our component props
-          setProduct({
+          const enhancedProduct: ProductDetailsProps = {
             ...foundProduct,
+            images: foundProduct.images || [foundProduct.image],
             imageUrl: foundProduct.image,
-          });
+            colors: foundProduct.features?.specifications.color || [],
+            ratings: foundProduct.features?.rating || 0,
+            features: {
+              highlights: foundProduct.features?.highlights || [],
+              specifications: {
+                dimensions: foundProduct.features?.specifications.dimensions || '',
+                weight: foundProduct.features?.specifications.weight || '',
+                material: foundProduct.features?.specifications.material || '',
+                color: foundProduct.features?.specifications.color || [],
+                warranty: foundProduct.features?.specifications.warranty || '',
+                inStock: foundProduct.features?.specifications.inStock || true,
+              },
+              rating: foundProduct.features?.rating || 0,
+              reviewCount: foundProduct.features?.reviewCount || 0,
+              category: foundProduct.features?.category || '',
+              tags: foundProduct.features?.tags || [],
+              brand: foundProduct.features?.brand || '',
+              sku: foundProduct.features?.sku || `SKU-${foundProduct.id}`,
+              manufacturingDate: foundProduct.features?.manufacturingDate || new Date().toISOString().split('T')[0],
+            },
+            isNew: foundProduct.isNew || false,
+            isBestSeller: foundProduct.isBestSeller || false,
+            shippingInfo: foundProduct.shippingInfo || {
+              freeShipping: foundProduct.price > 1000000,
+              estimatedDays: 3,
+              shippingCost: foundProduct.price > 1000000 ? 0 : 50000,
+            },
+          };
+          setProduct(enhancedProduct);
         }
       } catch (error) {
         console.error("Error fetching product:", error);

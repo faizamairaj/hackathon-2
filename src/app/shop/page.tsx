@@ -1,7 +1,9 @@
 // src/app/shop/page.tsx
+"use client";
 import dynamic from 'next/dynamic';
-import { Suspense } from 'react';
+import { Suspense, useState } from 'react';
 import { Loader2 } from "lucide-react";
+import { products } from '@/data/products';
 
 // Loading component
 const LoadingSpinner = () => (
@@ -27,18 +29,45 @@ const ShopIcons = dynamic(() => import("@/components/ShopIcons"), {
   loading: () => <LoadingSpinner />
 });
 
+const CategoryShowcase = dynamic(() => import("@/components/CategoryShowcase"), {
+  loading: () => <LoadingSpinner />
+});
+
+const TestimonialCarousel = dynamic(() => import("@/components/TestimonialCarousel"), {
+  loading: () => <LoadingSpinner />
+});
+
+const NewsletterSignup = dynamic(() => import("@/components/NewsletterSignup"), {
+  loading: () => <LoadingSpinner />
+});
+
 export default function ShopHomePage() {
+  const [filteredProducts, setFilteredProducts] = useState(products);
+
+  const handleFilterChange = (newFilteredProducts: any[]) => {
+    setFilteredProducts(newFilteredProducts);
+  };
+
   return (
     <div className="w-full">
       <Suspense fallback={<LoadingSpinner />}>
         <ShopHero />
         <div className="container mx-auto">
           <div className="section-spacing" />
-          <ShopBlowHero />
+          <ShopBlowHero 
+            onFilterChange={handleFilterChange} 
+            totalProducts={products.length} 
+          />
           <div className="section-spacing" />
-          <Products />
+          <Products products={filteredProducts} />
+          <div className="section-spacing" />
+          <CategoryShowcase />
           <div className="section-spacing" />
           <ShopIcons />
+          <div className="section-spacing" />
+          <TestimonialCarousel />
+          <div className="section-spacing" />
+          <NewsletterSignup />
         </div>
       </Suspense>
     </div>

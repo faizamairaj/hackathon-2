@@ -7,6 +7,7 @@ import { CartProvider } from "@/context/CartContext";
 import { WishlistProvider } from "@/context/WishlistContext";
 import { CompareProvider } from "@/context/CompareContext";
 import CartSidebar from "@/components/Cart/CartSidebar";
+import QuickOrder from "@/components/Shop/QuickOrder";
 
 const poppins = Poppins({
   subsets: ["latin"],
@@ -34,6 +35,7 @@ export default function RootLayout({
                 <main className="flex-grow pt-[100px]">{children}</main>
                 <Footer />
                 <CartSidebar />
+                <QuickOrder />
               </div>
             </CompareProvider>
           </WishlistProvider>
