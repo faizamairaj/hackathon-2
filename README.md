@@ -32,77 +32,76 @@
 ## 🛠️ Installation
 
 1. Clone the repository:
-
    ```bash
    git clone https://github.com/usama7871/hackathon-2.git
+   cd hackathon-2
    ```
 
 2. Install dependencies:
-
    ```bash
-   cd hackathon-2
    npm install
    ```
 
-3. Create a `.env.local` file:
-
-   ```env
-   NEXT_PUBLIC_API_URL=your_api_url
-   ```
-
-4. Run the development server:
-
+3. Run the development server:
    ```bash
    npm run dev
    ```
 
-## 📁 Project Structure
+## 📂 Project Structure
 
 ```
 funiro/
 ├── src/
-│   ├── app/             # App router pages
-│   ├── components/      # Reusable components
-│   ├── context/         # Context providers
-│   ├── hooks/           # Custom hooks
-│   ├── utils/           # Utility functions
-│   └── types/           # TypeScript types
-├── public/             # Static assets
-└── tailwind.config.js  # Tailwind configuration
+│   ├── app/                     # App router pages
+│   │   ├── about/               # About page
+│   │   ├── blog/                # Blog pages
+│   │   │   ├── [slug]/          # Dynamic blog post pages
+│   │   │   ├── category/        # Blog category pages
+│   │   │   └── tag/             # Blog tag pages
+│   │   ├── cart/                # Cart page
+│   │   ├── checkout/            # Checkout pages
+│   │   │   └── success/         # Checkout success page
+│   │   ├── compare/             # Compare page
+│   │   ├── contact/             # Contact page
+│   │   ├── shop/                # Shop pages
+│   │   │   └── [productId]/     # Dynamic product detail pages
+│   │   ├── wishlist/            # Wishlist page
+│   │   ├── layout.tsx           # App layout
+│   │   ├── page.tsx             # Main entry point
+│   │   └── globals.css          # Global styles
+│   ├── components/              # Reusable components
+│   │   ├── Blog/                # Blog components
+│   │   ├── Cart/                # Cart components
+│   │   ├── Checkout/            # Checkout components
+│   │   ├── Contact/             # Contact components
+│   │   ├── Home/                # Home page components
+│   │   ├── Shop/                # Shop components
+│   │   ├── common/              # Common components
+│   │   ├── Header.tsx           # Header component
+│   │   ├── Footer.tsx           # Footer component
+│   │   ├── ProductCard.tsx      # Product card component
+│   │   ├── ProductGrid.tsx      # Product grid component
+│   │   ├── ShopBlowHero.tsx     # Shop filtering component
+│   │   └── CartSidebar.tsx      # Cart sidebar component
+│   ├── context/                 # Context providers
+│   │   ├── CartContext.tsx      # Cart context
+│   │   ├── WishlistContext.tsx  # Wishlist context
+│   │   └── CompareContext.tsx   # Compare context
+│   ├── data/                    # Static data
+│   │   └── products.ts          # Product data
+│   ├── types/                   # TypeScript types
+│   │   ├── product.ts           # Product types
+│   │   └── blog.ts              # Blog types
+│   └── utils/                   # Utility functions
+│       └── formatPrice.ts       # Price formatting functions
+├── public/                      # Static assets
+│   ├── Logo.png                 # Logo image
+│   └── Pictures/                # Additional images
+├── tailwind.config.js           # Tailwind configuration
+├── next.config.mjs              # Next.js configuration
+├── package.json                 # Project metadata and dependencies
+└── .eslintrc.json               # ESLint configuration
 ```
-
-## 🎯 Core Components
-
-- **Cart System**
-  - Real-time updates
-  - Persistent storage
-  - Quantity management
-
-- **Product Display**
-  - Grid/List views
-  - Quick view modal
-  - Image galleries
-
-- **Checkout Process**
-  - Multi-step form
-  - Payment integration
-  - Order summary
-
-## 🎨 Design System
-
-- **Colors**
-  ```css
-  --primary: #B88E2F
-  --primary-dark: #A07B2A
-  --text-primary: #333333
-  --background: #FFFFFF
-  --accent: #E89F71
-  ```
-
-- **Typography**
-  - Font: Geist Sans
-  - Responsive scaling
-  - Consistent hierarchy
 
 ## 🔧 Configuration
 
@@ -123,3 +122,18 @@ Tailwind CSS configuration includes:
   - 2xl: 1536px
 
 ## ⚡ Performance
+
+- Optimized for fast loading times
+- Uses Next.js for server-side rendering and static site generation
+
+## 📄 License
+
+This project is licensed under the MIT License.
+
+## 🤝 Contributing
+
+Contributions are welcome! Please feel free to submit a Pull Request.
+
+## 📧 Contact
+
+For any inquiries, please contact us at support@funiro.com.

@@ -1,3 +1,4 @@
+// src/components/ProductCard.tsx
 "use client";
 import { Heart, Share2, Scale, Eye } from "lucide-react";
 import { useState, useEffect } from "react";

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Filter, ChevronDown, X } from 'lucide-react';
 import { products } from '@/data/products';
 
@@ -35,7 +35,7 @@ export default function ShopBlowHero({ onFilterChange, totalProducts }: ShopBlow
     { label: 'Over 3M', value: '3000000-up' }
   ];
 
-  const applyFilters = () => {
+  const applyFilters = useCallback(() => {
     let filtered = [...products];
 
     // Category filter
@@ -79,12 +79,11 @@ export default function ShopBlowHero({ onFilterChange, totalProducts }: ShopBlow
     });
 
     onFilterChange(filtered);
-  };
+  }, [filters, sortBy, itemsPerPage]);
 
-  // Apply filters whenever they change
   useEffect(() => {
     applyFilters();
-  }, [filters, sortBy]);
+  }, [applyFilters]);
 
   return (
     <div className="relative">

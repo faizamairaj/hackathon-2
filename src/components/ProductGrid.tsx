@@ -3,19 +3,10 @@
 
 import { useState } from "react";
 import ProductCard from "./ProductCard";
-
-interface Card {
-  id: string;
-  name: string;
-  description: string;
-  image: string;
-  price: number;
-  salePrice?: number;
-  salePercentage?: number;
-}
+import { Product } from "@/types/product";
 
 interface ProductGridProps {
-  data: Card[];
+  data: Product[];
 }
 
 export default function ProductGrid({ data }: ProductGridProps) {
@@ -28,8 +19,8 @@ export default function ProductGrid({ data }: ProductGridProps) {
   return (
     <>
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 p-6">
-        {data.slice(0, visibleCount).map((card) => (
-          <ProductCard key={card.id} {...card} />
+        {data.slice(0, visibleCount).map((product) => (
+          <ProductCard key={product.id} {...product} />
         ))}
       </div>
       {visibleCount < data.length && (

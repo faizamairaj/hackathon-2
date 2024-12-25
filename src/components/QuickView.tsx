@@ -1,3 +1,4 @@
+// src/components/QuickView.tsx
 "use client";
 import { X } from "lucide-react";
 import { useCart } from "@/context/CartContext";
